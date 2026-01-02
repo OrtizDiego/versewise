@@ -213,12 +213,12 @@ export interface DictionaryDefinition {
 }
 
 // Helper to strip Hebrew vowels/cantillation
-const stripHebrewVowels = (word: string) => {
+export const stripHebrewVowels = (word: string) => {
   return word.replace(/[\u0591-\u05C7]/g, "");
 };
 
 // Helper to generate potential Hebrew lemmas
-const getHebrewCandidates = (word: string): string[] => {
+export const getHebrewCandidates = (word: string): string[] => {
   const candidates = new Set<string>();
 
   // 1. Original (cleaned of punctuation)
