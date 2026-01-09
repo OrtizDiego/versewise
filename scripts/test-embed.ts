@@ -8,7 +8,8 @@ if (!KEY) throw new Error('Missing GOOGLE_API_KEY in environment');
 const BASE = 'https://generativelanguage.googleapis.com/v1beta2';
 
 // Helper: exit on HTTP errors
-async function check(res: Response) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function check(res: any) {
     if (!res.ok) {
         const body = await res.text();
         console.error(`❌ HTTP ${res.status}:`, body);

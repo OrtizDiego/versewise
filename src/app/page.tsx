@@ -47,7 +47,12 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
 
   const handleNavigateToVerse = (location: BibleLocation | BibleSearchPassage) => {
-    const verse = Array.isArray(location.verses) ? location.verses[0] : location.verse ?? 1;
+    let verse = 1;
+    if ('verses' in location) {
+      verse = location.verses[0];
+    } else {
+      verse = location.verse;
+    }
     setBibleLocation({
       book: location.book,
       chapter: location.chapter,

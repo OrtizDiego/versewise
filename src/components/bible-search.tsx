@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import type { FindRelevantPassagesOutput } from "@/ai/flows/find-relevant-passages";
+import type { FindRelevantPassagesOutput } from "@/ai/schemas";
 import { Skeleton } from "./ui/skeleton";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
@@ -65,44 +65,44 @@ export function BibleSearch({ onResultClick }: BibleSearchProps) {
         </form>
         <Separator />
         <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full pr-4">
-          <div className="space-y-4">
-            {isLoading &&
-              Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i}>
+          <ScrollArea className="h-full pr-4">
+            <div className="space-y-4">
+              {isLoading &&
+                Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i}>
+                    <CardHeader>
+                      <Skeleton className="h-5 w-1/4" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-3/4 mt-2" />
+                    </CardContent>
+                  </Card>
+                ))}
+              {results.map((passage, index) => (
+                <Card
+                  key={index}
+                  className="cursor-pointer hover:border-primary transition-colors"
+                  onClick={() => onResultClick(passage)}
+                >
                   <CardHeader>
-                    <Skeleton className="h-5 w-1/4" />
+                    <CardTitle className="font-body text-lg">
+                      {passage.book} {passage.chapter}:{passage.verses.join(", ")}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-3/4 mt-2" />
+                    <p className="font-body">{passage.text}</p>
                   </CardContent>
                 </Card>
               ))}
-            {results.map((passage, index) => (
-              <Card
-                key={index}
-                className="cursor-pointer hover:border-primary transition-colors"
-                onClick={() => onResultClick(passage)}
-              >
-                <CardHeader>
-                  <CardTitle className="font-body text-lg">
-                    {passage.book} {passage.chapter}:{passage.verses.join(", ")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="font-body">{passage.text}</p>
-                </CardContent>
-              </Card>
-            ))}
-            {!isLoading && results.length === 0 && (
+              {!isLoading && results.length === 0 && (
                 <div className="text-center text-muted-foreground pt-12">
-                    <p>No search results yet.</p>
-                    <p className="text-sm">Enter a query above to begin.</p>
+                  <p>No search results yet.</p>
+                  <p className="text-sm">Enter a query above to begin.</p>
                 </div>
-            )}
-          </div>
-        </ScrollArea>
+              )}
+            </div>
+          </ScrollArea>
         </div>
       </CardContent>
     </Card>

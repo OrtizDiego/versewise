@@ -61,10 +61,11 @@ const answerTheologicalQuestionFlow = ai.defineFlow(
       throw new Error('Invalid input to flow: input must be an object.');
     }
 
-    const { embedding } = await ai.embed({
-      model: 'googleai/text-embedding-004',
+    const result = await ai.embed({
+      embedder: 'googleai/text-embedding-004',
       content: input.question,
     });
+    const embedding = result[0].embedding;
 
     const { data: documents, error } = await supabase.rpc('match_documents', {
       query_embedding: embedding,

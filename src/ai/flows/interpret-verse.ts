@@ -64,10 +64,11 @@ const interpretVerseFlow = ai.defineFlow(
 
     const query = `Interpretation for ${input.verseReference}: ${input.userQuestion}`;
 
-    const { embedding } = await ai.embed({
-      model: 'googleai/text-embedding-004',
+    const result = await ai.embed({
+      embedder: 'googleai/text-embedding-004',
       content: query,
     });
+    const embedding = result[0].embedding;
 
     const { data: documents, error } = await supabase.rpc('match_documents', {
       query_embedding: embedding,
