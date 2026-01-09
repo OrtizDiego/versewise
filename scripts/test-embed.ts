@@ -20,8 +20,10 @@ async function check(res: Response) {
 async function main() {
     console.log('🔍 Listing available models…');
     const list = await fetch(`${BASE}/models?key=${KEY}`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const listJson: any = await check(list);
     console.log('✅ Models available:',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (listJson.models as any[]).map(m => m.name).join(', ')
     );
 
@@ -38,6 +40,7 @@ async function main() {
             }),
         }
     );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const embedJson: any = await check(embed);
 
     const dims = embedJson.embeddings?.[0]?.values;

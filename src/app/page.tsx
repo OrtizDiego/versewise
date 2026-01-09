@@ -56,7 +56,7 @@ export default function App() {
     setActiveTab("bible");
   };
 
-  const handleInterpretVerse = (verseRef: string, book: string, chapter: number, verse: number) => {
+  const handleInterpretVerse = (verseRef: string) => {
     setChatInput(`Tell me more about ${verseRef}`);
     setActiveTab("chat");
   };

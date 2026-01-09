@@ -6,8 +6,8 @@
  * - interpretVerse - A function that handles the verse interpretation process.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 import { supabase } from '@/lib/supabase';
 import { InterpretVerseInputSchema, InterpretVerseOutputSchema, type InterpretVerseInput, type InterpretVerseOutput } from '@/ai/schemas';
 
@@ -17,16 +17,16 @@ export async function interpretVerse(input: InterpretVerseInput): Promise<Interp
 }
 
 const PromptInputSchema = InterpretVerseInputSchema.extend({
-    documents: z.array(z.object({
-        content: z.string(),
-        fileName: z.string(),
-    })).describe('A library of documents to search for interpretations.'),
+  documents: z.array(z.object({
+    content: z.string(),
+    fileName: z.string(),
+  })).describe('A library of documents to search for interpretations.'),
 });
 
 const prompt = ai.definePrompt({
   name: 'interpretVersePrompt',
-  input: {schema: PromptInputSchema},
-  output: {schema: InterpretVerseOutputSchema},
+  input: { schema: PromptInputSchema },
+  output: { schema: InterpretVerseOutputSchema },
   prompt: `You are a friendly and knowledgeable Bible scholar. Your goal is to help users understand Bible verses by providing clear, elaborate, and conversational interpretations based on a curated library.
 
 Engage the user in a thoughtful way. Start with a friendly opening. Your interpretation should be comprehensive and well-structured, using only the information available in the provided library documents.
@@ -63,36 +63,36 @@ const interpretVerseFlow = ai.defineFlow(
     }
 
     const query = `Interpretation for ${input.verseReference}: ${input.userQuestion}`;
-    
+
     const { embedding } = await ai.embed({
-        model: 'googleai/text-embedding-004',
-        content: query,
+      model: 'googleai/text-embedding-004',
+      content: query,
     });
 
     const { data: documents, error } = await supabase.rpc('match_documents', {
-        query_embedding: embedding,
-        match_count: 10,
-        match_threshold: 0.7,
+      query_embedding: embedding,
+      match_count: 10,
+      match_threshold: 0.7,
     });
-    
+
     if (error) {
-        console.error('Supabase error:', error);
-        throw new Error(`Database error: ${error.message}`);
+      console.error('Supabase error:', error);
+      throw new Error(`Database error: ${error.message}`);
     }
 
     if (!Array.isArray(documents) || documents.length === 0) {
-        return {
-          interpretation: "I couldn't find any relevant information in my knowledge base to answer this. Please try rephrasing your question.",
-          sourceFiles: [],
-        };
+      return {
+        interpretation: "I couldn't find any relevant information in my knowledge base to answer this. Please try rephrasing your question.",
+        sourceFiles: [],
+      };
     }
 
-    const relevantDocuments = documents.map((doc: any) => ({
-        content: doc.content,
-        fileName: doc.file_name,
+    const relevantDocuments = documents.map((doc: { content: string; file_name: string }) => ({
+      content: doc.content,
+      fileName: doc.file_name,
     }));
 
-    const augmentedInput = {...input, documents: relevantDocuments};
+    const augmentedInput = { ...input, documents: relevantDocuments };
     const response = await prompt(augmentedInput);
     const output = response?.output;
 
@@ -102,15 +102,15 @@ const interpretVerseFlow = ai.defineFlow(
         sourceFiles: [],
       };
     }
-    
+
     const finalOutput = {
       interpretation: output.interpretation || 'The AI returned a response without an interpretation text.',
       sourceFiles: Array.isArray(output.sourceFiles) ? output.sourceFiles : [],
     };
 
     if (finalOutput.sourceFiles.length > 0) {
-        const retrievedFileNames = relevantDocuments.map(d => d.fileName);
-        finalOutput.sourceFiles = finalOutput.sourceFiles.filter(fileName => retrievedFileNames.includes(fileName));
+      const retrievedFileNames = relevantDocuments.map(d => d.fileName);
+      finalOutput.sourceFiles = finalOutput.sourceFiles.filter(fileName => retrievedFileNames.includes(fileName));
     }
 
     return finalOutput;

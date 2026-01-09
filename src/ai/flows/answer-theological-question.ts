@@ -84,7 +84,7 @@ const answerTheologicalQuestionFlow = ai.defineFlow(
       };
     }
 
-    const relevantDocuments = documents.map((doc: any) => ({
+    const relevantDocuments = documents.map((doc: { content: string; file_name: string }) => ({
       content: doc.content,
       fileName: doc.file_name,
     }));

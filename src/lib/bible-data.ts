@@ -255,7 +255,7 @@ export const getHebrewCandidates = (word: string): string[] => {
 
 export const getDefinition = async (word: string): Promise<DictionaryDefinition[] | null> => {
   // Clean punctuation from word
-  let cleanWord = word.replace(/[.,;·:?!\(\)«»]/g, '');
+  const cleanWord = word.replace(/[.,;·:?!\(\)«»]/g, '');
 
   // Detect Hebrew characters range: \u0590-\u05FF
   const isHebrew = /[\u0590-\u05FF]/.test(cleanWord);
@@ -286,7 +286,7 @@ export const getDefinition = async (word: string): Promise<DictionaryDefinition[
             return data as DictionaryDefinition[];
           }
         }
-      } catch (ignore) {
+      } catch {
         // Continue to next candidate
       }
     }

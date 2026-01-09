@@ -46,7 +46,7 @@ export function BibleViewer({ location, setLocation, onVerseClick, version, setV
     if (location.chapter > newChapters.length && newChapters.length > 0) {
       setLocation({ ...location, chapter: 1, verse: 1 });
     }
-  }, [location.book, location.chapter, setLocation]);
+  }, [location, location.book, location.chapter, setLocation]);
 
   React.useEffect(() => {
     const fetchVerses = async () => {
