@@ -263,7 +263,7 @@ export const getDefinition = async (word: string): Promise<DictionaryDefinition[
   if (!isHebrew) {
     // Greek Lookup (Simple)
     try {
-      const response = await fetch(`https://bolls.life/dictionary-definition/LSJ/${cleanWord}/`);
+      const response = await fetch(`https://bolls.life/dictionary-definition/BDBT/${cleanWord}/`);
       if (!response.ok) return null;
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) return data as DictionaryDefinition[];
@@ -279,7 +279,7 @@ export const getDefinition = async (word: string): Promise<DictionaryDefinition[
     // Try candidates in order until we get a hit
     for (const candidate of candidates) {
       try {
-        const response = await fetch(`https://bolls.life/dictionary-definition/BDB/${candidate}/`);
+        const response = await fetch(`https://bolls.life/dictionary-definition/BDBT/${candidate}/`);
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {

@@ -20,7 +20,7 @@ export function LexiconModal({ word, definitions, isLoading, isOpen, onClose }: 
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold font-headline">{word}</DialogTitle>
                     <DialogDescription>
-                        Lexicon Definition (LSJ)
+                        Lexicon Definition
                     </DialogDescription>
                 </DialogHeader>
 
