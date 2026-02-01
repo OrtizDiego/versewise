@@ -16,16 +16,18 @@ interface LexiconModalProps {
 export function LexiconModal({ word, definitions, isLoading, isOpen, onClose }: LexiconModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
-                <DialogHeader>
-                    <DialogTitle className="text-xl font-bold font-headline">{word}</DialogTitle>
-                    <DialogDescription>
-                        Lexicon Definition
-                    </DialogDescription>
-                </DialogHeader>
+            <DialogContent className="max-w-md p-0">
+                <div className="px-6 pt-6 pb-4 flex-none border-b">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold font-headline">{word}</DialogTitle>
+                        <DialogDescription>
+                            Lexicon Definition
+                        </DialogDescription>
+                    </DialogHeader>
+                </div>
 
-                <div className="flex-1 overflow-hidden mt-2">
-                    <ScrollArea className="h-full pr-4">
+                <ScrollArea className="h-[calc(85vh-180px)] w-full">
+                    <div className="px-6 py-4 space-y-4">
                         {isLoading ? (
                             <div className="space-y-4 animate-pulse">
                                 <div className="h-4 bg-muted rounded w-3/4"></div>
@@ -55,8 +57,10 @@ export function LexiconModal({ word, definitions, isLoading, isOpen, onClose }: 
                                 No definition found for this word.
                             </div>
                         )}
-                    </ScrollArea>
-                </div>
+                    </div>
+                </ScrollArea>
+
+                <div className="px-6 py-4"></div>
             </DialogContent>
         </Dialog>
     );
