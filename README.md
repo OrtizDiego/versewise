@@ -1,13 +1,15 @@
 
 # VerseWise
 
-![Tests Passed](https://img.shields.io/badge/tests-passed-brightgreen)
+![Versewise App](https://github.com/OrtizDiego/versewise/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-15.3-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8)
 
 **VerseWise** is a modern, feature-rich Bible study application designed to bridge the gap between ancient texts and modern accessibility. Built with performance and user experience in mind, it leverages cutting-edge web technologies to provide a seamless reading and study environment.
+
+![Home](assets/home.png)
 
 ## 🚀 Features
 
@@ -19,17 +21,17 @@
 
 ## 📸 Screenshots
 
-### Dictionary and Lexicon
-Understand the original text with our integrated lexicon tools.
-![Lexicon View](https://placehold.co/600x400/1a1a1a/FFF?text=Lexicon+View+Placeholder)
+### AI Chat
+Understand the original text with our integrated AI chat that allows you to interact with open-source commentaries.
+![AI Chat](assets/ai_assisstant.png)
 
 ### Multi-Column Study Mode
 Compare translations effortlessly.
-![Multi Column View](https://placehold.co/600x400/1a1a1a/FFF?text=Multi-Column+View+Placeholder)
+![Multi Column View](assets/greek_hebrew_view.png)
 
-### Responsive Design
-Optimization for all devices.
-![Mobile View](https://placehold.co/375x812/1a1a1a/FFF?text=Mobile+View+Placeholder)
+### Search 
+Search for key words across Scripture.
+![Search](assets/search.png)
 
 ## 🛠️ Tech Stack
 
