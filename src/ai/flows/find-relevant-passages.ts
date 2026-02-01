@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import { FindRelevantPassagesInputSchema, FindRelevantPassagesOutputSchema, type FindRelevantPassagesInput, type FindRelevantPassagesOutput } from '@/ai/schemas';
+import { searchBibleText } from '@/lib/bible-data';
 
 export async function findRelevantPassages(input: FindRelevantPassagesInput): Promise<FindRelevantPassagesOutput> {
   return findRelevantPassagesFlow(input);
@@ -44,6 +45,10 @@ const findRelevantPassagesFlow = ai.defineFlow(
     outputSchema: FindRelevantPassagesOutputSchema,
   },
   async input => {
+    if (input.matchType === 'exact' || input.matchType === 'partial') {
+      return await searchBibleText(input.query, input.matchType);
+    }
+
     const response = await prompt(input);
     const output = response?.output;
     

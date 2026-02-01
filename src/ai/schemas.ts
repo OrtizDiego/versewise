@@ -15,6 +15,7 @@ export type AnswerTheologicalQuestionOutput = z.infer<typeof AnswerTheologicalQu
 // Schema for find-relevant-passages.ts
 export const FindRelevantPassagesInputSchema = z.object({
   query: z.string().describe('The query to find relevant Bible passages for.'),
+  matchType: z.enum(['exact', 'partial', 'semantic']).optional().default('semantic').describe('The type of search to perform.'),
 });
 export type FindRelevantPassagesInput = z.infer<typeof FindRelevantPassagesInputSchema>;
 

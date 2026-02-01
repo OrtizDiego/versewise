@@ -293,3 +293,52 @@ export const getDefinition = async (word: string): Promise<DictionaryDefinition[
     return null;
   }
 };
+
+interface BollsSearchResult {
+  pk: number;
+  translation: string;
+  book: number;
+  chapter: number;
+  verse: number;
+  text: string;
+}
+
+export const searchBibleText = async (query: string, matchType: 'exact' | 'partial' = 'partial'): Promise<{ book: string; chapter: number; verses: number[]; text: string }[]> => {
+  try {
+    const url = `https://bolls.life/search/KJV/?search=${encodeURIComponent(query)}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Search failed with status: ${response.status}`);
+      return [];
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data)) return [];
+
+    // Helper to clean text
+    const cleanText = (text: string) => text.replace(/<[^>]+>/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
+
+    let results = data.map((item: BollsSearchResult) => {
+      const bookName = BIBLE_BOOKS[item.book - 1]; // book ID is 1-based
+      const text = cleanText(item.text);
+      return {
+        book: bookName,
+        chapter: item.chapter,
+        verses: [item.verse],
+        text: text,
+      };
+    }).filter(item => item.book); // Ensure we have a valid book name
+
+    if (matchType === 'exact') {
+      const lowerQuery = query.toLowerCase();
+      results = results.filter(item => item.text.toLowerCase().includes(lowerQuery));
+    }
+
+    // Limit results to avoid overwhelming the client (e.g., top 20)
+    return results.slice(0, 20);
+
+  } catch (error) {
+    console.error("Error searching Bible text:", error);
+    return [];
+  }
+};

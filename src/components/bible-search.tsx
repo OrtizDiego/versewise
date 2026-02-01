@@ -5,6 +5,8 @@ import { searchPassages } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import type { FindRelevantPassagesOutput } from "@/ai/schemas";
 import { Skeleton } from "./ui/skeleton";
@@ -19,6 +21,7 @@ interface BibleSearchProps {
 
 export function BibleSearch({ onResultClick }: BibleSearchProps) {
   const [query, setQuery] = React.useState("");
+  const [matchType, setMatchType] = React.useState<'semantic' | 'exact' | 'partial'>('semantic');
   const [results, setResults] = React.useState<FindRelevantPassagesOutput>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const { toast } = useToast();
@@ -29,7 +32,7 @@ export function BibleSearch({ onResultClick }: BibleSearchProps) {
 
     setIsLoading(true);
     setResults([]);
-    const response = await searchPassages({ query });
+    const response = await searchPassages({ query, matchType });
     setIsLoading(false);
 
     if ("error" in response) {
@@ -52,16 +55,37 @@ export function BibleSearch({ onResultClick }: BibleSearchProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 flex-1">
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="e.g., love your neighbor"
-            disabled={isLoading}
-          />
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Searching..." : "Search"}
-          </Button>
+        <form onSubmit={handleSearch} className="flex flex-col gap-4">
+          <div className="flex gap-2">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g., love your neighbor"
+              disabled={isLoading}
+            />
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Searching..." : "Search"}
+            </Button>
+          </div>
+          <RadioGroup 
+            defaultValue="semantic" 
+            value={matchType} 
+            onValueChange={(value) => setMatchType(value as 'semantic' | 'exact' | 'partial')}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="semantic" id="r1" />
+              <Label htmlFor="r1">Semantic (AI)</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="exact" id="r2" />
+              <Label htmlFor="r2">Exact Match</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="partial" id="r3" />
+              <Label htmlFor="r3">Partial Match</Label>
+            </div>
+          </RadioGroup>
         </form>
         <Separator />
         <div className="flex-1 overflow-hidden">
